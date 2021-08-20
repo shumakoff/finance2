@@ -1,0 +1,49 @@
+stages:
+    - build
+    - deploy
+
+
+Build from source:
+    stage: build
+    variables:
+        JS_BUILD_DIR: "frontend/dist"
+    cache:
+        paths:
+        - frontend/node_modules
+    script:
+        - cd frontend
+        - npm install
+        - npm run build
+    artifacts:
+        paths:
+            - ${JS_BUILD_DIR}/*
+        expire_in: 1 month
+
+
+Deploy static files:
+    stage: deploy
+    dependencies:
+        - Build from source
+    variables:
+        JS_BUILD_DIR: "frontend/dist/"
+        DJANGO_BUILD_DIR: "backend/f2/"
+        JS_DST_DIR: "/var/www/finance2/webapp/frontend/"
+        DJANGO_DST_DIR: "/var/www/finance2/webapp/backend/"
+    script:
+        - mkdir -p ${JS_DST_DIR}
+        - rsync -avh --progress --stats --delete ${JS_BUILD_DIR} ${JS_DST_DIR}
+        - rsync -avh --progress --stats ${DJANGO_BUILD_DIR}/../requirements.txt ${DJANGO_DST_DIR}/../requirements.txt
+        - rsync -avh --progress --stats --delete ${DJANGO_BUILD_DIR} ${DJANGO_DST_DIR}
+
+
+Deploy prod config for django:
+    stage: deploy
+    dependencies:
+        - Build from source
+    variables:
+        DJANGO_DST_DIR: "/var/www/finance2/webapp/backend/"
+    script:
+        - rsync -avh --progress --stats ${DJANGO_DST_DIR}/../settings_prod.py ${DJANGO_DST_DIR}/f2/
+        - source ${DJANGO_DST_DIR}/../venv/bin/activate
+        - cd ${DJANGO_DST_DIR}
+        - DJANGO_SETTINGS_MODULE=f2.settings_prod ./manage.py migrate

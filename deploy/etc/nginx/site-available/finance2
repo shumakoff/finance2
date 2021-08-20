@@ -1,0 +1,22 @@
+server {
+	root /var/www/finance2/webapp/frontend;
+
+	server_name finance2;
+	include uwsgi_params;
+
+	location /api/ {
+		uwsgi_pass unix:///run/uwsgi/app/finance2/socket;
+	}
+
+	location /admin/ {
+		uwsgi_pass unix:///run/uwsgi/app/finance2/socket;
+	}
+
+	location /static/rest_framework/ {
+		root /var/www/finance2/webapp/venv/lib/python3.9/site-packages/rest_framework;
+	}
+
+	location /static/admin {
+		root /var/www/finance2/webapp/venv/lib/python3.9/site-packages/django/contrib/admin;
+	}
+}
