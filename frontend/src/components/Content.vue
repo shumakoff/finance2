@@ -3,7 +3,7 @@
   <!-- body -->
   <div id="wrapper">
     <!-- sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" v-bind:class="{ toggled: sidebarToggled }" id="accordionSidebar">
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
           <div class="sidebar-brand-icon">
@@ -48,6 +48,10 @@
         </li>
       </router-link>
 
+      <div class="text-center d-none d-md-inline">
+        <button v-on:click="toggleSidebar" class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
     </ul>
     <!-- end of sidebar -->
 
@@ -56,6 +60,9 @@
         <notifications group="alertSuccess" classes="alert alert-primary alert-dismissible fade show"/>
         <notifications group="alertFail" classes="alert alert-danger alert-dismissible fade show"/>
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+          <button v-on:click="toggleSidebar" id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <font-awesome-icon icon="bars" />
+          </button>
           <search-form/>
           <new-entry-button v-on:showentryform="showNewEntryForm"/>
         </nav>
@@ -87,12 +94,17 @@ export default {
   data () {
     return {
       newEntryFormVisible: false,
+      sidebarToggled: false,
     }
   },
 
   methods: {
     log(message) {
       console.log(message);
+    },
+
+    toggleSidebar() {
+      this.sidebarToggled = !this.sidebarToggled;
     },
 
     showNewEntryForm() {

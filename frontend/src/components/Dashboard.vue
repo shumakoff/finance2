@@ -3,10 +3,6 @@
     <div class="row">
 
       <div class="col-xl-4 col-lg-5">
-        <accounts-balance/>
-      </div>
-
-      <div class="col-xl-4 col-lg-5">
         <div class="card">
           <div class="card-header">
             <div class="col text-center">
@@ -21,6 +17,10 @@
 
       <div class="col-xl-4 col-lg-5"> <!--column-->
         <last-entries/>
+      </div>
+
+      <div class="col-xl-4 col-lg-5">
+        <accounts-balance/>
       </div>
 
     </div>

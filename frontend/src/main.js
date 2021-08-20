@@ -7,6 +7,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { faChartArea } from '@fortawesome/free-solid-svg-icons'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Notifications from 'vue-notification'
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
@@ -22,6 +23,7 @@ library.add(faArrowLeft)
 library.add(faArrowRight)
 library.add(faPlusCircle)
 library.add(faChartArea)
+library.add(faBars)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(Notifications)
