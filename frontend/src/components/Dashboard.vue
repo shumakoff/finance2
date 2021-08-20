@@ -2,11 +2,11 @@
   <div class="container-fluid">
     <div class="row">
 
-      <div class="col-xl-4 col-lg-5">
+      <div class="col-lg-4">
         <div class="card">
           <div class="card-header">
             <div class="col text-center">
-              <date-picker v-on:input="loadCategories" v-model="defaultRange" range></date-picker>
+              <date-picker v-on:input="loadCategories" v-model="defaultRange" class="col-sm-12 " range></date-picker>
             </div>
           </div>
           <div class="card-body">
@@ -15,11 +15,11 @@
         </div>
       </div>
 
-      <div class="col-xl-4 col-lg-5"> <!--column-->
+      <div class="col-lg-5"> <!--column-->
         <last-entries/>
       </div>
 
-      <div class="col-xl-4 col-lg-5">
+      <div class="col-lg-3">
         <accounts-balance/>
       </div>
 
@@ -68,7 +68,11 @@ export default {
       this.datacollection = {}
       var labels = [];
       var data = [];
-      var backgroundColor = ['LightBlue', 'Green', 'Beige', 'LightPink', 'LightBlue', 'DarkBlue', 'DarkGreen']
+      var backgroundColor = ['LightBlue', 'Green', 'Beige', 'LightPink', 'LightBlue', 'DarkBlue', 'DarkGreen',
+                              'Black', 'AliceBlue', 'Azure', 'BlueViolet', 'CadetBlue', 'Coral', 'Chocolate',
+                              'DarkOliveGreen', 'DarkOrange', 'DarkSlateBlue', 'DeepPink', 'Gainsboro', 'Gray',
+                              'Indigo', 'Khaki', 'Lavender', 'LightSalmon', 'Linen', 'MediumPurple', 'MediumBlue',
+                              'MintCream', 'Navy', 'Olive', 'Plum', 'RoyalBlue']
       var datasets = [];
 
       for (var category of this.categories) {
@@ -117,8 +121,6 @@ export default {
       var date = new Date();
       date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
       var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-      // for testing
-      var firstDay = new Date(date.getFullYear(), 0, 1);
       var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
       return [firstDay, lastDay];
     },

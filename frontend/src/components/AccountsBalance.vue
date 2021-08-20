@@ -15,7 +15,7 @@
             <tbody>
               <tr v-for="child of account.children">
                 <td>{{ child.title }}</td>
-                <td class="font-weight-bold">{{ child.account_balance }}</td>
+                <td class="font-weight-bold text-right">{{ child.account_balance }}</td>
               </tr>
             </tbody>
           </table>      

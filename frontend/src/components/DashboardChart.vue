@@ -12,6 +12,16 @@ export default {
       default: null
     }
   },
+  data () {
+    return {
+      options: { 
+        legend : {
+          display: false
+        }
+      }
+    }
+  },
+
   options: {
   },
 
