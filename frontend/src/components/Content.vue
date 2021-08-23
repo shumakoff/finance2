@@ -49,7 +49,7 @@
       </router-link>
 
       <div class="text-center d-none d-md-inline">
-        <button v-on:click="toggleSidebar" class="rounded-circle border-0" id="sidebarToggle"></button>
+          <font-awesome-icon v-on:click="toggleSidebar" :icon="collapsedIcon" />
       </div>
 
     </ul>
@@ -83,6 +83,8 @@ import Stats from '../components/Stats.vue'
 import SearchForm from '../components/SearchForm.vue'
 import NewEntryButton from '../components/NewEntryButton.vue'
 import NewEntryForm from '../components/NewEntryForm.vue'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 export default {
   components: {
@@ -113,6 +115,15 @@ export default {
 
   },
   computed: {
+
+    collapsedIcon() {
+      if (!this.sidebarToggled) {
+        return faArrowLeft;
+      } else {
+        return faArrowRight;
+      }
+    },
+
 
   },
 }
