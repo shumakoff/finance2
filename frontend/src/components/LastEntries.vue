@@ -70,6 +70,7 @@ export default {
       category: 0,
       accounts: 0,
       record: 0,
+      account: 0,
     }
   },
 
@@ -78,7 +79,6 @@ export default {
   },
   
   created () {
-    this.loadRecentRecords()
   },
 
   methods: {
@@ -106,6 +106,7 @@ export default {
             result[acc.id] = {acc};
           }
           this.accounts = result;
+          this.loadRecentRecords()
           }
         )
     },

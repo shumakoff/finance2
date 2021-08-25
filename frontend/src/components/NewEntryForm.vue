@@ -12,14 +12,16 @@
 
         <form>
 
+          <!-- date field -->
           <div class="form-group">
             <label>Entry Date</label>
-            <date-picker v-model="pickedDate" :input-class="'form-control form-control-sm'"></date-picker>
+            <date-picker v-model="pickedDate" v-bind:class="{ 'border border-danger': formValidation.isDateInvalid }" :input-class="'form-control form-control-sm'" required></date-picker>
           </div>
 
+          <!-- category field -->
           <div class="form-group">
             <label for="category">Category</label>
-            <select v-model="entryForm.category" v-on:change="onCategorySelection" id="category" class="form-control form-control-sm">
+            <select v-model="entryForm.category" v-on:change="onCategorySelection" v-bind:class="{ 'border border-danger': formValidation.isCategoryInvalid }" id="category" class="form-control form-control-sm" required>
               <option disabled>Pick a category</option>
                 <optgroup v-for="category of categories" :label="category.title">
                   <option v-for="child of category.children" :ref="'category_' + child.id" v-bind:value="child.id">{{ child.title }}</option>
@@ -27,9 +29,10 @@
             </select>
           </div>
 
+          <!-- account field -->
           <div class="form-group">
             <label for="account">Account</label>
-            <select v-model="entryForm.account" v-on:change="onAccountSelection" id="account" class="form-control form-control-sm">
+            <select v-model="entryForm.account" v-on:change="onAccountSelection" v-bind:class="{ 'border border-danger': formValidation.isAccountInvalid }" id="account" class="form-control form-control-sm" required>
               <option disabled>Pick an account</option>
                 <optgroup v-for="account of accounts" :label="account.title">
                   <option v-for="child of account.children" :ref="'account_' + child.id" v-bind:value="child.id">{{ child.title }}</option>
@@ -37,6 +40,7 @@
             </select>
           </div>
 
+          <!-- item field -->
           <div class="form-group">
             <label for="item">Item</label>
             <vue-simple-suggest
@@ -47,18 +51,21 @@
               :filter-by-query="true"
               :styles="autoCompleteStyle"
               v-on:suggestion-click="onSuggestClick"
+              v-bind:class="{ 'border border-danger': formValidation.isItemInvalid }" 
               @select="onSuggestClick"
               :value="entryForm.item"
               :placeholder="'New Item'"
               :id="'item'"
-              autocomplete="off">
+              autocomplete="off"
+              required>
               <!-- Filter by input text to only show the matching results -->
             </vue-simple-suggest>
           </div>
 
+          <!-- value field -->
           <div class="form-group">
             <label for="value">Value</label>
-            <input v-model.number="entryForm.value" type="number" class="form-control form-control-sm" id="value" placeholder="0.00">
+            <input v-model.number="entryForm.value" type="number" v-bind:class="{ 'border border-danger': formValidation.isValueInvalid }" class="form-control form-control-sm" id="value" placeholder="0.00" required>
           </div>
         </form>
 
@@ -111,6 +118,13 @@ export default {
       },
       handpickedCategory: false,
       handpickedAccount: false,
+      formValidation: {
+        isAccountInvalid: false,
+        isCategoryInvalid: false,
+        isItemInvalid: false,
+        isDateInvalid: false,
+        isValueInvalid: false,
+      }
     }
   },
 
@@ -134,13 +148,39 @@ export default {
       
     },
 
+    validateForm() {
+      for (var field in this.formValidation) {
+        this.formValidation[field] = false;
+      }
+      if (this.pickedDate == null) {
+        this.formValidation.isDateInvalid = true;
+      } else { 
+        this.entryForm.date = this.pickedDate.toLocaleDateString("se-SE");
+      }
+      if (isNaN(this.entryForm['account'])) {
+        this.formValidation.isAccountInvalid = true;
+      }
+      if (isNaN(this.entryForm['category'])) {
+        this.formValidation.isCategoryInvalid = true;
+      }
+      if (this.entryForm['item'] == "") {
+        this.formValidation.isItemInvalid = true;
+      }
+      if ((isNaN(this.entryForm['value'])) | (this.entryForm['value'] == 0)) {
+        this.formValidation.isValueInvalid = true;
+      }
+    },
+
     submitForm () {
-      this.entryForm.date = this.pickedDate.toLocaleDateString("se-SE");
-      console.log('Form submitted');
-      console.log(this.entryForm);
+      this.validateForm();
       axios
         .post('/records/', this.entryForm)
         .then((response) => {
+
+          // unset variables after sucessful posting
+          this.handpickedCategory = false;
+          this.handpickedAccount = false;
+
           console.log(response)
           this.$notify({
               group: 'alertSuccess',
