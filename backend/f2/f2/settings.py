@@ -111,7 +111,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+#CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_WHITELIST = ['http://localhost:8081']
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

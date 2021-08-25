@@ -11,6 +11,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Notifications from 'vue-notification'
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
+import VueCookies from 'vue-cookies'
 import App from './App.vue'
 import '../static/css/sb-admin-2.css';
 
@@ -28,6 +29,7 @@ library.add(faBars)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(Notifications)
 Vue.use(vueNumeralFilterInstaller)//, { locale: 'ru' });
+Vue.use(VueCookies)
 
 Vue.prototype.$nestObjects = function(objects){
   var unwanted_kids = [];
@@ -59,4 +61,6 @@ new Vue({
   router,
   render: h => h(App)
 })
+
+axios.defaults.headers.common['X-CSRFToken'] = Vue.$cookies.get('csrftoken');
 
