@@ -45,5 +45,6 @@ Deploy prod config for django:
     script:
         - rsync -avh --progress --stats ${DJANGO_DST_DIR}/../settings_prod.py ${DJANGO_DST_DIR}/f2/
         - source ${DJANGO_DST_DIR}/../venv/bin/activate
+        - pip install -r ${DJANGO_DST_DIR}/../requirements.txt
         - cd ${DJANGO_DST_DIR}
         - DJANGO_SETTINGS_MODULE=f2.settings_prod ./manage.py migrate
