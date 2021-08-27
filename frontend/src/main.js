@@ -11,6 +11,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Notifications from 'vue-notification'
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
+import numeral from 'numeral'
 import VueCookies from 'vue-cookies'
 import App from './App.vue'
 import '../static/css/sb-admin-2.css';

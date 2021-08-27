@@ -67,9 +67,14 @@
           <new-entry-button v-on:showentryform="showNewEntryForm"/>
         </nav>
         <template v-if="newEntryFormVisible">
-          <new-entry-form v-on:showentryform="showNewEntryForm"></new-entry-form>
+          <template v-if="recordId != 0">
+            <new-entry-form v-on:showentryform="showNewEntryForm" v-bind:recordId="recordId"></new-entry-form>
+          </template>
+          <template v-else>
+            <new-entry-form v-on:showentryform="showNewEntryForm"></new-entry-form>
+          </template>
         </template>
-        <router-view/>
+        <router-view v-on:showentryform="showNewEntryForm($event)"/>
       </div>
     </div>
   </div>
@@ -97,6 +102,7 @@ export default {
     return {
       newEntryFormVisible: false,
       sidebarToggled: false,
+      recordId: 0,
     }
   },
 
@@ -109,8 +115,9 @@ export default {
       this.sidebarToggled = !this.sidebarToggled;
     },
 
-    showNewEntryForm() {
+    showNewEntryForm(recordId) {
       this.newEntryFormVisible = !this.newEntryFormVisible;
+      this.recordId = recordId;
     },
 
   },

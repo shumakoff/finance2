@@ -92,7 +92,7 @@ export default {
     'date-picker': DatePicker,
     'vue-simple-suggest': VueSimpleSuggest,
   },
-  props: [],
+  props: ['recordId'],
   data () {
     return {
       categories: "",
@@ -128,15 +128,36 @@ export default {
     }
   },
 
+  created() {
+  },
+
   mounted() {
     this.pickTodaysDate();
     this.loadCategories();
     this.loadAccounts();
     this.loadRecords();
     this.$refs.newEntry.focus();
+    // check if we trying to edit an existing record
+    if (this.recordId != undefined) {
+      this.editRecord(this.recordId);
+    };
   },
 
   methods: {
+
+    editRecord(recordId) {
+      axios
+        .get('/records/'+recordId)
+        .then((response) => { 
+          var numeral = require('numeral');
+          var record = response.data;
+          this.pickedDate = new Date(record.date);
+          this.entryForm.category = record.category;
+          this.entryForm.account = record.account;
+          this.entryForm.item = record.item;
+          this.entryForm.value = numeral(record.value).value();
+        });
+    },
 
     onCategorySelection() {
       this.handpickedCategory = true;
@@ -146,6 +167,22 @@ export default {
     onAccountSelection() {
       this.handpickedAccount = true;
       
+    },
+
+    notifySuccess(title, text) {
+      this.$notify({
+          group: 'alertSuccess',
+          title: title,
+          text: text,
+        });
+    },
+
+    notifyError(title, text) {
+      this.$notify({
+          group: 'alertFail',
+          title: title,
+          text: text,
+        });
     },
 
     validateForm() {
@@ -173,29 +210,33 @@ export default {
 
     submitForm () {
       this.validateForm();
-      axios
-        .post('/records/', this.entryForm)
-        .then((response) => {
+      if (this.recordId != undefined) {
+        axios
+          .put('/records/'+this.recordId+'/', this.entryForm)
+          .then((response) => {
+            console.log(response);
+            this.notifySuccess('Entry edited', 'Entry was edited successfully');
+          })
+          .catch((error) => {
+            console.log(error);
+            this.notifyError('Error', error);
+          })
+      } else {
+        axios
+          .post('/records/', this.entryForm)
+          .then((response) => {
+            console.log(response)
+            // unset variables after sucessful posting
+            this.handpickedCategory = false;
+            this.handpickedAccount = false;
 
-          // unset variables after sucessful posting
-          this.handpickedCategory = false;
-          this.handpickedAccount = false;
-
-          console.log(response)
-          this.$notify({
-              group: 'alertSuccess',
-              title: 'New entry addedd',
-              text: 'New entry have been addedd!',
-            });
-          this.entryForm.date = new Date;
-        })
-        .catch((error) => {
-          this.$notify({
-              group: 'alertFail',
-              title: 'Error',
-              text: 'There has been an error',
-            });
-        });
+            this.notifySuccess('New entry addedd', 'New entry have been addedd!');
+            this.entryForm.date = new Date;
+          })
+          .catch((error) => {
+            this.notifyError('Error', error);
+          });
+      };
     },
 
     pickTodaysDate() {

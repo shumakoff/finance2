@@ -21,7 +21,7 @@
             </thead>
 
             <tbody>
-              <tr v-for="record of recentRecords.results">
+              <tr v-on:click="$emit('showentryform', record.id)" v-for="record of recentRecords.results">
                 <td>{{ record.date }}</td>
                 <td>{{ record.item }}</td>
                 <td v-if="accounts[record.account]['acc']['currency'] == 'BTC'">{{ record.value }}</td>

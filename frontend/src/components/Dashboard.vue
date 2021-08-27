@@ -16,7 +16,7 @@
       </div>
 
       <div class="col-lg-5"> <!--column-->
-        <last-entries/>
+        <last-entries v-on:showentryform="editRecord($event)"/>
       </div>
 
       <div class="col-lg-3">
@@ -161,6 +161,10 @@ export default {
       });
       
     },
+
+    editRecord(recordId) {
+      this.$emit('showentryform', recordId);
+    }
 
   },
 
