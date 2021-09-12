@@ -51,7 +51,7 @@
               :filter-by-query="true"
               :styles="autoCompleteStyle"
               v-on:suggestion-click="onSuggestClick"
-              v-bind:class="{ 'border border-danger': formValidation.isItemInvalid }" 
+              v-bind:class="{ 'border border-danger': formValidation.isItemInvalid }"
               @select="onSuggestClick"
               :value="entryForm.item"
               :placeholder="'New Item'"
@@ -148,7 +148,7 @@ export default {
     editRecord(recordId) {
       axios
         .get('/records/'+recordId)
-        .then((response) => { 
+        .then((response) => {
           var numeral = require('numeral');
           var record = response.data;
           this.pickedDate = new Date(record.date);
@@ -161,12 +161,12 @@ export default {
 
     onCategorySelection() {
       this.handpickedCategory = true;
-      
+
     },
 
     onAccountSelection() {
       this.handpickedAccount = true;
-      
+
     },
 
     notifySuccess(title, text) {
@@ -191,8 +191,9 @@ export default {
       }
       if (this.pickedDate == null) {
         this.formValidation.isDateInvalid = true;
-      } else { 
-        this.entryForm.date = this.pickedDate.toLocaleDateString("se-SE");
+      } else {
+        var tzoffset = this.pickedDate.getTimezoneOffset() * 60000 //offset in milliseconds
+        this.entryForm.date = (new Date(this.pickedDate - tzoffset)).toISOString().split('T')[0]
       }
       if (isNaN(this.entryForm['account'])) {
         this.formValidation.isAccountInvalid = true;
@@ -247,7 +248,7 @@ export default {
     loadCategories() {
       axios
         .get('/categories/')
-        .then((response) => { 
+        .then((response) => {
           this.categories = this.$nestObjects(response.data);
         });
     },
@@ -255,7 +256,7 @@ export default {
     loadAccounts() {
       axios
         .get('/accounts/')
-        .then((response) => { 
+        .then((response) => {
           this.accounts = this.$nestObjects(response.data);
         });
     },
@@ -263,7 +264,7 @@ export default {
     loadRecords() {
       axios
         .get('/records-suggest/')
-        .then((response) => { 
+        .then((response) => {
           this.records = response.data;
         });
     },
